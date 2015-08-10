@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+
+	xmlns:amq="http://activemq.apache.org/schema/core"
+
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+
+				http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+
+				http://www.springframework.org/schema/context
+
+		        http://www.springframework.org/schema/context/spring-context-3.0.xsd
+
+		        http://activemq.apache.org/schema/core
+
+				http://activemq.apache.org/schema/core/activemq-core-5.4.2.xsd"
+
+	default-autowire="byName">
+
+	<description>jms 配置</description>
+
+
+
+
+
+	<amq:queue name="smeg_oms_command" physicalName="smg.message.command" />
+
+
+
+	<amq:queue name="q1" physicalName="smg.message.cdn" />
+
+	<bean  
+
+		class="com.jms.SMGMessageListenerContainer">
+
+		 <property name="connectionFactory" ref="connectionFactory" />  
+
+        <property name="destination" ref="q1" />  
+
+        <property name="concurrentConsumers" value="8" />   <!--  执行这个队列的线程数 -->
+
+        <property name="futureTaskExecutor" ref="taskExecutor" />
+
+		<property name="timeout" value="${timeout}" />
+
+		<property name="futureManager" ref="futureManager" />
+
+		<property name="producer"  ref="resultProducer" />
+
+	</bean>  
+
+
+
+
+
+
+
+	<!-- 消费队列  smg.message.command2 -->
+
+	<amq:queue name="q2" physicalName="smg.message.wowza" />
+
+	<bean  
+
+		class="com.jms.SMGMessageListenerContainer">
+
+		 <property name="connectionFactory" ref="connectionFactory" />  
+
+        <property name="destination" ref="q2" />  
+
+        <property name="concurrentConsumers" value="2" />   
+
+        <property name="futureTaskExecutor" ref="taskExecutor" />
+
+		<property name="timeout" value="${timeout}" />
+
+		<property name="futureManager" ref="futureManager" />
+
+		<property name="producer"  ref="resultProducer" />
+
+	</bean>
+
+
+
+    <!-- 消费SFTP队列  smg.message.command3 -->
+
+	<amq:queue name="q3" physicalName="smg.message.youtube" />
+
+	<bean  
+
+		class="com.jms.SMGMessageListenerContainer">
+
+		 <property name="connectionFactory" ref="connectionFactory" />  
+
+        <property name="destination" ref="q3" />  
+
+        <property name="concurrentConsumers" value="2" />   
+
+        <property name="futureTaskExecutor" ref="taskExecutor" />
+
+		<property name="timeout" value="${timeout}" />
+
+		<property name="futureManager" ref="futureManager" />
+
+		<property name="producer"  ref="resultProducer" />
+
+	</bean>	
+
+	
+
+	<amq:queue name="q4" physicalName="smg.message.otherweb" />
+
+	<bean  
+
+		class="com.jms.SMGMessageListenerContainer">
+
+		 <property name="connectionFactory" ref="connectionFactory" />  
+
+        <property name="destination" ref="q4" />  
+
+        <property name="concurrentConsumers" value="2" />   
+
+        <property name="futureTaskExecutor" ref="taskExecutor" />
+
+		<property name="timeout" value="${timeout}" />
+
+		<property name="futureManager" ref="futureManager" />
+
+		<property name="producer"  ref="resultProducer" />
+
+	</bean>	
+
+
+
+	<amq:queue name="q5" physicalName="smg.message.wxpost" />
+
+	<bean  
+
+		class="com.jms.SMGMessageListenerContainer">
+
+		 <property name="connectionFactory" ref="connectionFactory" />  
+
+        <property name="destination" ref="q5" />  
+
+        <property name="concurrentConsumers" value="2" />   
+
+        <property name="futureTaskExecutor" ref="taskExecutor" />
+
+		<property name="timeout" value="${timeout}" />
+
+		<property name="futureManager" ref="futureManager" />
+
+		<property name="producer"  ref="resultProducer" />
+
+	</bean>	
+
+
+
+	<amq:queue name="q6" physicalName="smg.message.pubpost" />
+
+	<bean  
+
+		class="com.jms.SMGMessageListenerContainer">
+
+		 <property name="connectionFactory" ref="connectionFactory" />  
+
+        <property name="destination" ref="q6" />  
+
+        <property name="concurrentConsumers" value="2" />   
+
+        <property name="futureTaskExecutor" ref="taskExecutor" />
+
+		<property name="timeout" value="${timeout}" />
+
+		<property name="futureManager" ref="futureManager" />
+
+		<property name="producer"  ref="resultProducer" />
+
+	</bean>	
+
+
+
+	<amq:queue name="q7" physicalName="smg.message.shenyang" />
+
+	<bean  
+
+		class="com.jms.SMGMessageListenerContainer">
+
+		 <property name="connectionFactory" ref="connectionFactory" />  
+
+        <property name="destination" ref="q7" />  
+
+        <property name="concurrentConsumers" value="2" />   
+
+        <property name="futureTaskExecutor" ref="taskExecutor" />
+
+		<property name="timeout" value="${timeout}" />
+
+		<property name="futureManager" ref="futureManager" />
+
+		<property name="producer"  ref="resultProducer" />
+
+	</bean>
+
+
+
+	<amq:queue name="q8" physicalName="smg.message.appbreak" />
+
+	<bean  
+
+		class="com.jms.SMGMessageListenerContainer">
+
+		 <property name="connectionFactory" ref="connectionFactory" />  
+
+        <property name="destination" ref="q8" />  
+
+        <property name="concurrentConsumers" value="2" />   
+
+        <property name="futureTaskExecutor" ref="taskExecutor" />
+
+		<property name="timeout" value="${timeout}" />
+
+		<property name="futureManager" ref="futureManager" />
+
+		<property name="producer"  ref="resultProducer" />
+
+	</bean>	
+
+	
+
+	<!--<amq:queue name="q5" physicalName="smg.message.shgov" />
+
+	<bean  
+
+		class="com.jms.SMGMessageListenerContainer">
+
+		 <property name="connectionFactory" ref="connectionFactory" />  
+
+        <property name="destination" ref="q5" />  
+
+        <property name="concurrentConsumers" value="2" />   
+
+        <property name="futureTaskExecutor" ref="taskExecutor" />
+
+		<property name="timeout" value="${timeout}" />
+
+		<property name="futureManager" ref="futureManager" />
+
+		<property name="producer"  ref="resultProducer" />
+
+	</bean>
+
+	-->
+
+  
+
+
+
+</beans>

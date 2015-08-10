@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:amq="http://activemq.apache.org/schema/core"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+				http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+				http://www.springframework.org/schema/context
+		        http://www.springframework.org/schema/context/spring-context-3.0.xsd
+		        http://activemq.apache.org/schema/core
+				http://activemq.apache.org/schema/core/activemq-core-5.4.2.xsd"
+	default-autowire="byName">
+	<description>jms 配置</description>
+
+
+
+
+	<bean id="futureManager" class="com.jms.FutureManager">
+	</bean>
+
+	<bean id="taskExecutor"
+		class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+		<!-- 核心线程数，默认为1 -->
+		<property name="corePoolSize" value="${consumerSize}" />
+		<!-- 最大线程数，默认为Integer.MAX_VALUE -->
+		<property name="maxPoolSize" value="${consumerSize}" />
+		<!-- 队列最大长度，一般需要设置值>=notifyScheduledMainExecutor.maxNum；默认为Integer.MAX_VALUE -->
+		<property name="queueCapacity" value="1" />
+		<!-- 线程池维护线程所允许的空闲时间，默认为60s -->
+		<property name="keepAliveSeconds" value="3000" />
+		<!-- 线程池对拒绝任务（无线程可用）的处理策略，目前只支持AbortPolicy、CallerRunsPolicy；默认为后者 -->
+		<property name="rejectedExecutionHandler">
+			<bean class="java.util.concurrent.ThreadPoolExecutor$CallerRunsPolicy" />
+		</property>
+	</bean>
+
+
+
+
+
+	<!-- 队列 -->
+
+
+
+	<bean id="jmsReciveListener" class="com.jms.receive.JmsReceiveListener"
+		scope="prototype">
+
+
+
+	</bean>
+
+
+
+
+
+
+
+
+
+	<bean id="FTP" class="sh.odb.plugin.media.message.FTPTask" scope="prototype">
+
+		<property name="bufSize" value="${bufSize}"></property>
+
+	</bean>
+
+
+
+	<bean id="RSYNC" class="sh.odb.plugin.media.message.RSYNCTask"
+		scope="prototype">
+
+		<property name="rsyncSH" value="${rsyncSH}"></property>
+
+		<property name="rcommand" value="${r_command}"></property>
+
+		<property name="rcharacter" value="${r_character}"></property>
+
+	</bean>
+
+
+
+	<bean id="SFTP" class="sh.odb.plugin.media.message.SFTPTask"
+		scope="prototype">
+
+	</bean>
+
+
+
+	<bean id="MSFTP" class="sh.odb.plugin.media.message.ArraySFTPTask"
+		scope="prototype">
+
+	</bean>
+
+	<bean id="MFTP" class="sh.odb.plugin.media.message.ArrayFTPTask"
+		scope="prototype">
+
+	</bean>
+
+
+
+	<bean id="POST" class="sh.odb.plugin.media.message.PostTask"
+		scope="prototype">
+
+		<property name="maxSize" value="3"></property><!--失败重复次数 -->
+
+		<property name="sleepTime" value="3"></property><!--失败重复间隔时间，单位为秒 
+			（特别注意 单位为秒） -->
+
+		<property name="timeout" value="3"></property><!--Post 超时时间，单位为秒（特别注意 
+			单位为秒） -->
+
+	</bean>
+
+</beans>

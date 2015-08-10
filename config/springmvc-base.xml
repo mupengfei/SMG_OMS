@@ -1,0 +1,120 @@
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:jee="http://www.springframework.org/schema/jee" xmlns:tx="http://www.springframework.org/schema/tx" xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:tool="http://www.springframework.org/schema/tool" xmlns:cache="http://www.springframework.org/schema/cache"
+	xsi:schemaLocation="
+			http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+			http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.1.xsd
+			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+			http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd
+			http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
+			http://www.springframework.org/schema/tool http://www.springframework.org/schema/tool/spring-tool-3.1.xsd
+			http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-3.1.xsd"
+	default-lazy-init="true">
+
+
+	<context:component-scan base-package="sh.odb.**.controller" />
+
+	<!--Spring3.1开始的注解 HandlerMapping -->
+	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" />
+	<!--Spring3.1开始的注解 HandlerAdapter -->
+	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+		<property name="messageConverters">
+			<list>
+				<bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" />
+			</list>
+		</property>
+	</bean>
+
+
+
+	<!-- 避免IE执行AJAX时,返回JSON出现下载文件 -->
+	<bean id="mappingJacksonHttpMessageConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+		<property name="supportedMediaTypes">
+			<list>
+				<value>text/html;charset=UTF-8</value>
+			</list>
+		</property>
+	</bean>
+
+
+
+
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="defaultEncoding">
+			<value>UTF-8</value>
+		</property>
+		<property name="maxUploadSize">
+			<!-- 上传文件大小限制为31M，31*1024*1024 -->
+			<value>32505856</value>
+		</property>
+		<property name="maxInMemorySize">
+			<value>4096</value>
+		</property>
+	</bean>
+
+	<bean class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+		<property name="viewClass" value="sh.odb.plugin.viewstatic.ODBFreemarkerView" />
+		<!-- 模板后缀 -->
+		<property name="suffix" value=".ftl" />
+		<!-- html编码 -->
+		<property name="contentType" value="text/html;charset=utf-8" />
+		<!-- 是否允许request和session参数 -->
+		<property name="requestContextAttribute" value="request" />
+		<property name="exposeRequestAttributes" value="true" />
+		<property name="exposeSessionAttributes" value="true" />
+		<property name="order" value="2" />
+	</bean>
+
+
+<!--  HtmlEscapeMarkerConfigurer    -->
+	<bean class="sh.odb.plugin.htmlEscape.HtmlEscapeMarkerConfigurer">
+		<!-- 文件存放地址 -->
+		<property name="templateLoaderPath" value="/WEB-INF/classes/ftl/" />
+		<!-- 编码 -->
+		<property name="defaultEncoding" value="utf-8" />
+		<property name="freemarkerSettings">
+			<props>
+				<!-- 自动刷新模板时间 -->
+				<prop key="template_update_delay">10</prop>
+				<!-- 默认locale -->
+				<prop key="locale">zh_CN</prop>
+			</props>
+		</property>
+		<property name="freemarkerVariables">
+			<map>
+				<entry key="extends" value-ref="extendsDirective"></entry>
+				<entry key="override" value-ref="overrideDirective"></entry>
+				<entry key="block" value-ref="blockDirective"></entry>
+				<entry key="super" value-ref="superDirective"></entry>
+
+			</map>
+		</property>
+
+	</bean>
+
+	<bean id="extendsDirective" class="sh.odb.core.view.freemarker.ExtendsDirective"></bean>
+	<bean id="overrideDirective" class="sh.odb.core.view.freemarker.OverrideDirective"></bean>
+	<bean id="blockDirective" class="sh.odb.core.view.freemarker.BlockDirective"></bean>
+	<bean id="superDirective" class="sh.odb.core.view.freemarker.SuperDirective"></bean>
+
+
+
+	<!-- 统一报错页面 -->
+	<bean class="sh.odb.core.handler.ExceptionHandler" />
+	<!-- 统一验证页面
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**/**.htm" />
+			<bean id="validateInterceptor" class="sh.odb.plugin.validate.interceptor.ValidateInterceptor" />
+		</mvc:interceptor>
+	</mvc:interceptors>-->
+
+
+</beans>

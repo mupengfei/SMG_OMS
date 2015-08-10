@@ -1,0 +1,331 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+
+	xmlns:task="http://www.springframework.org/schema/task"
+
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+
+	xmlns:context="http://www.springframework.org/schema/context"
+
+	xmlns:amq="http://activemq.apache.org/schema/core"
+
+	
+
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+
+		http://www.springframework.org/schema/context
+
+        http://www.springframework.org/schema/context/spring-context-3.0.xsd
+
+        http://activemq.apache.org/schema/core
+
+		http://activemq.apache.org/schema/core/activemq-core-5.4.2.xsd
+
+		http://www.springframework.org/schema/task 
+
+		http://www.springframework.org/schema/task/spring-task-3.0.xsd
+
+		" default-autowire="byName">
+
+
+
+
+
+		
+
+	<bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+
+		<property name="connectionFactory" ref="connectionFactory"></property>
+
+		<property name="explicitQosEnabled" value="true" /><!-- 使 deliveryMode, priority, timeToLive设置生效-->
+
+		<property name="deliveryPersistent" value="false" />
+
+		<property name="deliveryMode" value="2" />
+
+		<property name="receiveTimeout" value="1000" />
+
+	</bean>
+
+	
+
+	
+
+	<!-- 队列发送消息 -->
+
+	<bean id="ptpMessageProducer" class="com.jms.producer.PtpMessageProducer"   >
+
+		<property name="jmsTemplate" ref="jmsTemplate"/>
+
+		<property name="topic" ref="smeg_oms_command"/>
+
+	</bean>
+
+
+
+
+
+
+
+	
+
+
+
+	<bean id="resultProducer" class="com.jms.producer.ResultProducer">
+
+		<property name="defaultProducer" ref="cdnProducer"/>
+
+		<property name="producers">
+
+			<map> 
+
+				<!--begin   RSYNC  -->
+
+				<entry key="WOWZA"   >
+
+					<ref bean="wowzaProducer"/> 
+
+				</entry>
+
+				<entry key="CDN"   >
+
+					<ref bean="cdnProducer"/> 
+
+				</entry>
+
+				<!--end   RSYNC  -->
+
+				<!--begin youtube test  MFTP  -->
+
+				<entry key="MFTPTEST"   >
+
+					<ref bean="mftptestProducer"/> 
+
+				</entry>
+
+				<!--end   youtube test  MFTP  -->
+
+				<!--begin shenyang  MFTP  -->
+
+				<entry key="SHENYANG"   >
+
+					<ref bean="shenyangProducer"/> 
+
+				</entry>
+
+				<!--end   shenyang  MFTP  -->
+
+				<!--begin   FTP  -->
+
+				<entry key="YOUTUBE"   >
+
+					<ref bean="youtubeProducer"/> 
+
+				</entry>
+
+				<!--end   MSFTP  -->
+
+				<!--begin   POST数据  -->
+
+				<entry key="OTHERWEB"   >
+
+					<ref bean="otherwebProducer"/> 
+
+				</entry>
+
+				<!--end   POST数据  -->
+
+				<!--begin   微信 POST数据  -->
+
+				<entry key="WXPOST"   >
+
+					<ref bean="wxpostProducer"/> 
+
+				</entry>
+
+				<!--end  微信 POST数据  -->
+
+				<!--begin   发布 POST数据  -->
+
+				<entry key="PUBPOST"   >
+
+					<ref bean="pubpostProducer"/> 
+
+				</entry>
+
+				<!--end  发布 POST数据  -->
+
+				<!--begin   app爆料 POST数据  -->
+
+				<entry key="APPBREAK">
+
+					<ref bean="appbreakProducer"/> 
+
+				</entry>
+
+				<!--end  微信 POST数据  -->
+
+			</map>
+
+		</property>
+
+	</bean>
+
+
+
+	<amq:queue name="smeg_oms_cdn_result" physicalName="smg.message.cdnresult" />
+
+	<amq:queue name="smeg_oms_wowza_result" physicalName="smg.message.wowzaresult" />
+
+	<amq:queue name="smeg_oms_youtube_result" physicalName="smg.message.youtuberesult" />
+
+	<amq:queue name="smeg_oms_otherweb_result" physicalName="smg.message.otherwebresult" />
+
+	<amq:queue name="smeg_oms_wxpost_result" physicalName="smg.message.wxpostresult" />
+
+	<amq:queue name="smeg_oms_pubpost_result" physicalName="smg.message.pubpostresult" />
+
+
+
+	<amq:queue name="smeg_oms_mftptest_result" physicalName="smg.message.mftptestresult" />
+
+	<amq:queue name="smeg_oms_shenyang_result" physicalName="smg.message.shenyangresult" />
+
+	
+
+    <amq:queue name="smeg_oms_appbreak_result" physicalName="smg.message.appbreakresult" />
+
+	 
+
+	<bean id="wowzaProducer" class="com.jms.producer.PublisherMessageProducer"  >
+
+		<property name="jmsTemplate" ref="jmsTemplate"/>
+
+		<property name="topic" ref="smeg_oms_wowza_result"/>
+
+	</bean> 
+
+	
+
+	<bean id="cdnProducer" class="com.jms.producer.PublisherMessageProducer"  >
+
+		<property name="jmsTemplate" ref="jmsTemplate"/>
+
+		<property name="topic" ref="smeg_oms_cdn_result"/>
+
+	</bean> 
+
+	
+
+	<bean id="youtubeProducer" class="com.jms.producer.PublisherMessageProducer"  >
+
+		<property name="jmsTemplate" ref="jmsTemplate"/>
+
+		<property name="topic" ref="smeg_oms_youtube_result"/>
+
+	</bean> 
+
+	
+
+	<bean id="otherwebProducer" class="com.jms.producer.PublisherMessageProducer"  >
+
+		<property name="jmsTemplate" ref="jmsTemplate"/>
+
+		<property name="topic" ref="smeg_oms_otherweb_result"/>
+
+	</bean> 
+
+
+
+	<bean id="wxpostProducer" class="com.jms.producer.PublisherMessageProducer"  >
+
+		<property name="jmsTemplate" ref="jmsTemplate"/>
+
+		<property name="topic" ref="smeg_oms_wxpost_result"/>
+
+	</bean> 
+
+
+
+	<bean id="pubpostProducer" class="com.jms.producer.PublisherMessageProducer"  >
+
+		<property name="jmsTemplate" ref="jmsTemplate"/>
+
+		<property name="topic" ref="smeg_oms_pubpost_result"/>
+
+	</bean> 
+
+	
+
+	<bean id="mftptestProducer" class="com.jms.producer.PublisherMessageProducer"  >
+
+		<property name="jmsTemplate" ref="jmsTemplate"/>
+
+		<property name="topic" ref="smeg_oms_mftptest_result"/>
+
+	</bean>
+
+
+
+	<bean id="shenyangProducer" class="com.jms.producer.PublisherMessageProducer"  >
+
+		<property name="jmsTemplate" ref="jmsTemplate"/>
+
+		<property name="topic" ref="smeg_oms_shenyang_result"/>
+
+	</bean>
+
+	
+
+	<bean id="appbreakProducer" class="com.jms.producer.PublisherMessageProducer"  >
+
+		<property name="jmsTemplate" ref="jmsTemplate"/>
+
+		<property name="topic" ref="smeg_oms_appbreak_result"/>
+
+	</bean> 
+
+	
+
+	
+
+	<!--  原始消息回调 
+
+	<bean id="resultProducer" class="com.jms.service.ActionResultService"  >
+
+		<property name="url" value="${resultURL}"/>
+
+	</bean>
+
+	
+
+	
+
+	<task:scheduled-tasks> 
+
+        <task:scheduled ref="resultProducer" method="quartzSendMessage" cron="${cron}"/> 
+
+        <task:scheduled ref="ptpMessageProducer" method="timmerSend" cron="0/1 * * * * ?"/> 
+
+    </task:scheduled-tasks>
+
+    
+
+    
+
+    test
+
+	
+
+	-->
+
+	<!--<task:scheduled-tasks> 
+
+        <task:scheduled ref="ptpMessageProducer" method="timmerSend" cron="0/1 * * * * ?"/> 
+
+    </task:scheduled-tasks>-->
+
+	
+
+</beans>
