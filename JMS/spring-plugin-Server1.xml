@@ -229,6 +229,25 @@
 	</bean>	
 
 	
+	<amq:queue name="q9" physicalName="smg.message.get.jingan" />
+
+	<bean class="com.jms.SMGMessageListenerContainer">
+
+		<property name="connectionFactory" ref="connectionFactory" />
+
+		<property name="destination" ref="q9" />
+
+		<property name="concurrentConsumers" value="1" />
+
+		<property name="futureTaskExecutor" ref="taskExecutor" />
+
+		<property name="timeout" value="${timeout}" />
+
+		<property name="futureManager" ref="futureManager" />
+
+		<property name="producer" ref="resultProducer" />
+
+	</bean>
 
 	<!--<amq:queue name="q5" physicalName="smg.message.shgov" />
 

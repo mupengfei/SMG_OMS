@@ -13,11 +13,9 @@ import sh.odb.plugin.media.message.AbstractTask;
 
 public class JmsReceiveListener {
 
-	
-	private  AbstractTask task ;
+	private AbstractTask task;
 	private Log log = LogFactory.getLog(getClass());;
-	
-	
+
 	public ResultBean onMessage(MediaBean bean) {
 		ResultBean resultBean = new ResultBean();
 		try {
@@ -36,18 +34,20 @@ public class JmsReceiveListener {
 
 	private AbstractTask getAbstractTask(MediaBean bean) throws Exception {
 		try {
-			AbstractTask task = (AbstractTask) SpringContextUtil.getBean(bean.getType());
+			AbstractTask task = (AbstractTask) SpringContextUtil.getBean(bean
+					.getType());
 			task.setBean(bean);
 			return task;
 
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			throw new Exception("no this function :" + bean.getType());
 		}
 	}
 
 	public void done() throws Exception {
 		task.done();
-		
+
 	}
 
 }

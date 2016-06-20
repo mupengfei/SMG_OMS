@@ -108,5 +108,17 @@
 			单位为秒） -->
 
 	</bean>
+<!-- 
+	<bean id="AXIS2" class="sh.odb.plugin.media.message.Axis2Task"
+		scope="prototype">
+
+		<property name="url" value="${axis2URL}"></property> 
+
+	</bean>
+ -->
+	<bean id="GET" class="sh.odb.plugin.media.message.GetTask"
+		scope="prototype"> 
+
+	</bean>
 
 </beans>

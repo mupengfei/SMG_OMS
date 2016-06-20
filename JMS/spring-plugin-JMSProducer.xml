@@ -96,16 +96,6 @@
 
 				<!--end   RSYNC  -->
 
-				<!--begin youtube test  MFTP  -->
-
-				<entry key="MFTPTEST"   >
-
-					<ref bean="mftptestProducer"/> 
-
-				</entry>
-
-				<!--end   youtube test  MFTP  -->
-
 				<!--begin shenyang  MFTP  -->
 
 				<entry key="SHENYANG"   >
@@ -116,7 +106,7 @@
 
 				<!--end   shenyang  MFTP  -->
 
-				<!--begin   FTP  -->
+				<!--begin   youtube MFTP  -->
 
 				<entry key="YOUTUBE"   >
 
@@ -124,7 +114,7 @@
 
 				</entry>
 
-				<!--end   MSFTP  -->
+				<!--end   youtube MFTP  -->
 
 				<!--begin   POST数据  -->
 
@@ -164,6 +154,17 @@
 
 				</entry>
 
+				<entry key="AXIS2JINGAN">
+
+					<ref bean="axis2Producer" />
+
+				</entry>
+
+				<entry key="JINGANGET">
+
+					<ref bean="jinganAxis2Producer" />
+
+				</entry>
 				<!--end  微信 POST数据  -->
 
 			</map>
@@ -188,15 +189,15 @@
 
 
 
-	<amq:queue name="smeg_oms_mftptest_result" physicalName="smg.message.mftptestresult" />
-
 	<amq:queue name="smeg_oms_shenyang_result" physicalName="smg.message.shenyangresult" />
 
 	
 
     <amq:queue name="smeg_oms_appbreak_result" physicalName="smg.message.appbreakresult" />
+	
+    <amq:queue name="smeg_oms_axis2_result" physicalName="smg.message.axis2jinganresult" />
 
-	 
+	<amq:queue name="smeg_oms_jinganAxis2_result" physicalName="smg.message.get.jingan.result" />
 
 	<bean id="wowzaProducer" class="com.jms.producer.PublisherMessageProducer"  >
 
@@ -256,16 +257,6 @@
 
 	</bean> 
 
-	
-
-	<bean id="mftptestProducer" class="com.jms.producer.PublisherMessageProducer"  >
-
-		<property name="jmsTemplate" ref="jmsTemplate"/>
-
-		<property name="topic" ref="smeg_oms_mftptest_result"/>
-
-	</bean>
-
 
 
 	<bean id="shenyangProducer" class="com.jms.producer.PublisherMessageProducer"  >
@@ -286,6 +277,21 @@
 
 	</bean> 
 
+	<bean id="axis2Producer" class="com.jms.producer.PublisherMessageProducer">
+
+		<property name="jmsTemplate" ref="jmsTemplate" />
+
+		<property name="topic" ref="smeg_oms_axis2_result" />
+
+	</bean>
+
+	<bean id="jinganAxis2Producer" class="com.jms.producer.PublisherMessageProducer">
+
+		<property name="jmsTemplate" ref="jmsTemplate" />
+
+		<property name="topic" ref="smeg_oms_jinganAxis2_result" />
+
+	</bean>
 	
 
 	
